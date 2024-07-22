@@ -17,3 +17,7 @@ npx --legacy-peer-deps shadcn-ui@latest add button dialog dropdown-menu form inp
 ### init prisma
 
 npx prisma init
+
+### commit prisma schema changes to db
+
+npx prisma db push
