@@ -13,3 +13,7 @@ npx --legacy-peer-deps shadcn-ui@latest init
 ### adding shadcn-ui component
 
 npx --legacy-peer-deps shadcn-ui@latest add button dialog dropdown-menu form input label skeleton tabs textarea toast toolti
+
+### init prisma
+
+npx prisma init
