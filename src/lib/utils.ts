@@ -22,3 +22,10 @@ export function formatRelativeDate(from: Date) {
     return formatDate(from, "MMM d, yyy");
   }
 }
+
+export function formatNumber(n: number): string {
+  return Intl.NumberFormat("en-US", {
+    notation: "compact",
+    maximumFractionDigits: 1,
+  }).format(n);
+}

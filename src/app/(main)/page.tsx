@@ -1,6 +1,7 @@
 import Post from "@/components/post/postList/Post";
 import FlatList from "@/components/commons/FlatList";
 import PostEditor from "@/components/post/editor/PostEditor";
+import FeatureBar from "@/components/post/trends/FeatureBar";
 import { postDataInclude } from "@/lib/types";
 import prisma from "@/lib/prisma";
 
@@ -16,6 +17,7 @@ export default async function Home() {
         {/* {posts.map(post => <Post key={post.id} post={post}/>)} */}
         <FlatList of={posts} render={(post) => <Post post={post} />} />
       </div>
+      <FeatureBar />
     </main>
   );
 }
