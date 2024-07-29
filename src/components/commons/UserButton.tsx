@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { Check, LogOutIcon, Monitor, Moon, Sun, UserIcon } from "lucide-react";
-import { useSession } from "@/providers/SessionProvider";
+import { useQueryClient } from "@tanstack/react-query";
+import { useTheme } from "next-themes";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,9 +18,9 @@ import {
 } from "../ui/dropdown-menu";
 import Useravatar from "./Useravatar";
 import { ButtonProps } from "../ui/button";
+import { useSession } from "@/providers/SessionProvider";
 import { logoutAction } from "@/app/(auth)/actions";
 import { cn } from "@/lib/utils";
-import { useTheme } from "next-themes";
 
 interface UserButtonProps extends ButtonProps {
   className?: string;
@@ -28,6 +29,7 @@ interface UserButtonProps extends ButtonProps {
 export default function UserButton({ className }: UserButtonProps) {
   const { user } = useSession();
   const { theme, setTheme } = useTheme();
+  const queryClient = useQueryClient();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -69,7 +71,12 @@ export default function UserButton({ className }: UserButtonProps) {
             </DropdownMenuSubContent>
           </DropdownMenuPortal>
         </DropdownMenuSub>
-        <DropdownMenuItem onClick={() => logoutAction()}>
+        <DropdownMenuItem
+          onClick={() => {
+            queryClient.clear();
+            logoutAction();
+          }}
+        >
           <LogOutIcon className="mr-2 size-4" />
           Logout
         </DropdownMenuItem>

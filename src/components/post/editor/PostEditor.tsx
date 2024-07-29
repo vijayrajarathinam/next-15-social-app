@@ -7,11 +7,14 @@ import Useravatar from "@/components/commons/Useravatar";
 import { useSession } from "@/providers/SessionProvider";
 import { Button } from "@/components/ui/button";
 import "./styles.css";
+import { useSubmitPostMutation } from "./mutation";
+import LoadingButton from "@/components/commons/LoadingButton";
 
 const placeholder: string = "Share your thought for the day";
 
 export default function PostEditor() {
   const { user } = useSession();
+  const mutation = useSubmitPostMutation();
   const editor = useEditor({
     extensions: [
       StarterKit.configure({ bold: false, italic: false }),
@@ -21,9 +24,10 @@ export default function PostEditor() {
 
   const input = editor?.getText({ blockSeparator: "\n" }) || "";
 
-  async function onEditorSubmit() {
-    await submitPost(input);
-    editor?.commands.clearContent();
+  function onEditorSubmit() {
+    mutation.mutate(input, {
+      onSuccess: () => editor?.commands.clearContent(),
+    });
   }
   return (
     <div className="mx-2 flex flex-col gap-5 rounded-2xl bg-card p-5 shadow-sm">
@@ -35,13 +39,14 @@ export default function PostEditor() {
         />
       </div>
       <div className="flex justify-end">
-        <Button
+        <LoadingButton
+          loading={mutation.isPending}
           onClick={onEditorSubmit}
           disabled={!input.trim()}
           className="min-w-20"
         >
           Post
-        </Button>
+        </LoadingButton>
       </div>
     </div>
   );
