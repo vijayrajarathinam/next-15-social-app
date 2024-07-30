@@ -2,13 +2,11 @@
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import ExtensionPlaceholder from "@tiptap/extension-placeholder";
-import { submitPost } from "./actions";
 import Useravatar from "@/components/commons/Useravatar";
 import { useSession } from "@/providers/SessionProvider";
-import { Button } from "@/components/ui/button";
-import "./styles.css";
-import { useSubmitPostMutation } from "./mutation";
 import LoadingButton from "@/components/commons/LoadingButton";
+import { useSubmitPostMutation } from "./mutations";
+import "./styles.css";
 
 const placeholder: string = "Share your thought for the day";
 
