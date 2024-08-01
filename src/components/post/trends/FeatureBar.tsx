@@ -5,10 +5,10 @@ import { Loader2 } from "lucide-react";
 import { validateRequest } from "@/auth";
 import FlatList from "@/components/commons/FlatList";
 import Useravatar from "@/components/commons/Useravatar";
-import { UserData, userDataSelect } from "@/lib/types";
-import { Button } from "@/components/ui/button";
-import prisma from "@/lib/prisma";
+import { UserData, getUserDataSelect } from "@/lib/types";
+import FollowButton from "@/components/user/FollowButton";
 import { formatNumber } from "@/lib/utils";
+import prisma from "@/lib/prisma";
 
 export default function FeatureBar() {
   return (
@@ -38,7 +38,15 @@ const SuggestionItem = ({ user }: { user: UserData }) => {
           </p>
         </div>
       </Link>
-      <Button>Follow</Button>
+      <FollowButton
+        userId={user.id}
+        initialState={{
+          followers: user._count.followers,
+          isFollowedByUser: !!user.followers.some(
+            ({ followerId }) => followerId === user.id,
+          ),
+        }}
+      />
     </div>
   );
 };
@@ -47,8 +55,11 @@ async function FollowSuggesions() {
   const { user } = await validateRequest();
   if (!user) return null;
   const usersToFollow = await prisma.user.findMany({
-    where: { NOT: { id: user.id } },
-    select: userDataSelect,
+    where: {
+      NOT: { id: user.id },
+      followers: { none: { followerId: user.id } },
+    },
+    select: getUserDataSelect(user.id),
     take: 5, // limit 5
   });
 

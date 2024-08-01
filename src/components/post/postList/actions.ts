@@ -1,7 +1,7 @@
 "use server";
 
 import { validateRequest } from "@/auth";
-import { postDataInclude } from "@/lib/types";
+import { getPostDataInclude } from "@/lib/types";
 import prisma from "@/lib/prisma";
 
 export async function deletePostAction(id: string) {
@@ -12,5 +12,8 @@ export async function deletePostAction(id: string) {
   if (!post) throw new Error(`Post with id:${id} not found`);
   if (post.userId !== user.id) throw new Error("Unauthorized");
 
-  return await prisma.post.delete({ where: { id }, include: postDataInclude });
+  return await prisma.post.delete({
+    where: { id },
+    include: getPostDataInclude(user.id),
+  });
 }
